@@ -1,23 +1,6 @@
 ## ---- include = F--------------------------------------------------------
 library(SamplingStrata)
 data("swissmunicipalities")
-data("swisserrors")
-data("swissframe")
-data("swissstrata")
-# load("2. SamplingStrata functions.RData")
-
-
-## ---- include = F--------------------------------------------------------
-library(SamplingStrata)
-data("swissmunicipalities")
-data("swisserrors")
-data("swissframe")
-data("swissstrata")
-# load("2. SamplingStrata functions.RData")
-
-
-## ---- eval = T-----------------------------------------------------------
-data("swissmunicipalities")
 swissmunicipalities$id <- c(1:nrow(swissmunicipalities))
 swissmunicipalities$dom <- 1
 frame <- buildFrameDF(swissmunicipalities,
@@ -42,11 +25,11 @@ summary(mod_Pop_2040_H00PTOT)
 model <- NULL
 model$beta[1] <- mod_Pop_020_H00PTOT$coefficients[2]
 model$sig2[1] <- summary(mod_Pop_020_H00PTOT)$sigma
-model$type[1] <- "loglinear"
+model$type[1] <- "linear"
 model$gamma[1] <- 0
 model$beta[2] <- mod_Pop_2040_H00PTOT$coefficients[2]
 model$sig2[2] <- summary(mod_Pop_2040_H00PTOT)$sigma
-model$type[2] <- "loglinear"
+model$type[2] <- "linear"
 model$gamma[2] <- 0
 model <- as.data.frame(model)
 model
@@ -74,7 +57,7 @@ solution <- optimizeStrata2 (
   pops = 20,
   nStrata = 5,
   writeFiles = FALSE,
-  showPlot = FALSE,
+  showPlot = TRUE,
   parallel = FALSE
 )
 

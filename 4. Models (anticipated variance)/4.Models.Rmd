@@ -9,15 +9,6 @@ widescreen: true
 smaller: true
 ---
 
-```{r, include = F}
-library(SamplingStrata)
-data("swissmunicipalities")
-data("swisserrors")
-data("swissframe")
-data("swissstrata")
-# load("2. SamplingStrata functions.RData")
-```
-
 ## Anticipated variance
 
 It has been assumed that, when optimizing the stratification of a sampling frame,
@@ -37,18 +28,7 @@ implementation, only models linking continuous variables can be considered.
 
 In order to introduce the anticipated variance in the overall optimization, it is necessary first of all to model the target variable (dependent variable) with respect to the available proxy variable (independent variable).
 
-For instance, let us consider the swiss municipalities example:
-
-
-```{r, include = F}
-library(SamplingStrata)
-data("swissmunicipalities")
-data("swisserrors")
-data("swissframe")
-data("swissstrata")
-# load("2. SamplingStrata functions.RData")
-```
-
+For instance, let us consider the swiss municipalities example, 
 and let have the same stratification variables and same target variables:
 
 - "Surfacesbois","Surfacescult"
@@ -131,7 +111,7 @@ solution <- optimizeStrata2 (
   alldomains = FALSE,
   dom = 4,
   iter = 25,
-  pops = 20,
+  pops = 10,
   nStrata = 5,
   writeFiles = FALSE,
   showPlot = FALSE,
