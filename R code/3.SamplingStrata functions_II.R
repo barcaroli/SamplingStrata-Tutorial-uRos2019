@@ -44,7 +44,7 @@ solution <- optimizeStrata2 (
   strcens = TRUE, 
   alldomains = FALSE,
   dom = 4,
-  iter = 50,
+  iter = 25,
   pops = 20,
   nStrata = 5,
   writeFiles = FALSE,
@@ -64,7 +64,7 @@ table(framenew$LABEL)
 
 
 ## ---- eval = T,echo=TRUE-------------------------------------------------
-strataStructure <- summaryStrata(solution$framenew,solution$aggr_strata,progress=TRUE)
+strataStructure <- summaryStrata(solution$framenew,solution$aggr_strata,progress=FALSE)
 strataStructure
 
 
