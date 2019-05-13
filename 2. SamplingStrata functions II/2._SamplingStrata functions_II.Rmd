@@ -1,0 +1,153 @@
+---
+title: "Functions in SamplingStrata package - II"
+author: "Marco Ballin, Giulio Barcaroli"
+date: "20 May 2019"
+output: slidy_presentation
+footer: "SamplingStrata Tutorial (uRos2019 - Bucharest 20-21 May 2019)"
+incremental: true
+widescreen: true
+smaller: true
+---
+
+```{r, include = F}
+library(SamplingStrata)
+data("swissmunicipalities")
+data("swisserrors")
+data("swissframe")
+data("swissstrata")
+# load("2. SamplingStrata functions.RData")
+```
+
+## Implementation with only continuous stratification variables
+
+Function *optimizeStrata2* performs the same task than *optimizeStrata*, but with a different Genetic Algorithm, operating on a genome represented by vector containing real values, instead of integers. This permits to operate directly on the boundaries of the strata, instead of aggregating the initial atomic strata. In some situations (not exceedingly too big size of the sampling frame) this new function is much more efficient. Furthermore, resulting strata are guaranteed to not overlap with respect to the different stratification variables. A major limitation is in the nature of the stratification variables, that are required to be all continuous (though categorical ordinal can be handled). Another one is in the fact that it is necessary to choose the number of strata (it is not optimally determined during the evolution process as in the case of *optimizeStrata*).
+
+## Necessary steps with only continuous stratification variables
+
+To operate with *optimizeStrata2* it is no more necessary to produce the *strata* dataframe. 
+
+We just need to perform the following steps:
+
+> - construction of the **sampling frame**
+> - choice of **precision constraints**
+> - **optimization**
+> - **analysis** of results
+> - **selection of the sample**
+
+
+## Construction of the sampling frame
+
+Let us consider the following example: 
+
+```{r, eval = T}
+data("swissmunicipalities")
+swissmunicipalities$id <- c(1:nrow(swissmunicipalities))
+swissmunicipalities$dom <- 1
+frame <- buildFrameDF(swissmunicipalities,
+                      id = "id",
+                      domainvalue = "REG",
+                      X = c("Surfacesbois","Surfacescult"),
+                      Y = c("Pop020", "Pop2040")
+)
+# choice of units to be selected in any case (census units)
+framecens <- frame[frame$X1 > 2500 
+                   | frame$X2 > 1200,]
+# remaining units 
+framesamp <- frame[!(frame$id %in% framecens$id),]
+
+```
+
+## Choice of precision constraints
+
+```{r, eval = T}
+cv <- NULL
+cv$DOM <- "DOM1"
+cv$CV1 <- 0.1
+cv$CV2 <- 0.1
+cv <- as.data.frame(cv)
+cv <- cv[rep(row.names(cv),7),]
+cv$domainvalue <- c(1:7)
+cv
+```
+
+By so doing, we have chosen two stratification variables (*Surfacesbois* and  *Surfacescult*) and two target variables (*Pop020* and *Pop2040*), on both of which we have set the same precision constraint (a maximum CV equal to 10%).
+
+## Optimization 
+
+Now the execution of the optimization step (for the domain 4) using *optimizeStrata2* is straightforward, as we do not need to categorize stratification variables and to generate the atomic strata:
+
+```{r, eval = T}
+solution <- optimizeStrata2 (
+  errors = cv, 
+  framesamp = framesamp,
+  framecens = framecens, 
+  strcens = TRUE, 
+  alldomains = FALSE,
+  dom = 4,
+  iter = 25,
+  pops = 20,
+  nStrata = 5,
+  writeFiles = FALSE,
+  showPlot = FALSE,
+  parallel = FALSE
+)
+```
+
+## Optimization
+
+```{r, eval = T, echo=TRUE}
+sum(round(solution$aggr_strata$SOLUZ))
+expected_CV(solution$aggr_strata)
+```
+
+This function also outputs the new version of the overall frame (sampling plus census), already provided with the labels indicating to which stratum each unit belongs:
+
+```{r  , include=TRUE}
+framenew <- solution$framenew
+table(framenew$LABEL)
+```
+
+The first 5 strata are the ones pertaining to sampling units, the 6th is the one with censused units.
+
+
+## Analysis of the results
+
+To inspect the structure of the strata, the function *summaryStrata* is available:
+
+```{r, eval = T,echo=TRUE}
+strataStructure <- summaryStrata(solution$framenew,solution$aggr_strata,progress=FALSE)
+strataStructure
+```
+
+## Analysis of the results
+
+It is also possible to visually investigate the distribution of population units in the strata by using the function *plotStrata2d*:
+
+```{r, eval = T,echo=TRUE}
+outstrata <- plotStrata2d(
+                  solution$framenew, 
+                  solution$aggr_strata,
+                  domain = 4, 
+                  vars = c("X1","X2"),
+                  labels =     c("Surfacesbois","Surfacescult")
+                  )
+```
+
+## Analysis of the results
+
+Together with the plot, also a tabular format of the optimized strata is produced by *plotStrata2d*:
+
+
+```{r, eval = T,echo=TRUE}
+outstrata
+```
+
+
+## Selection of the sample
+
+Finally, the selection of the sample is performed by using the same function selectSample, but this time is no more necessary to handle separately units to be sampled and units to be censused:
+
+```{r, eval = T,echo=TRUE}
+samp <- selectSample(solution$framenew,solution$aggr_strata)
+```
+
