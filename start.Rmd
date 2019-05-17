@@ -1,0 +1,18 @@
+---
+title: "Prepare the Tutorial"
+date: "20 May 2019"
+output: slidy_presentation
+footer: "SamplingStrata Tutorial (uRos2019 - Bucharest 20-21 May 2019)"
+incremental: true
+widescreen: true
+smaller: true
+---
+
+Perform the following steps:
+
+- define a directory in your laptop (ex: **tutorial**)
+- if you don't have RStudio, install it (**https://www.rstudio.com/products/rstudio/download/**)
+- inside RStudio install SamplingStrata: install.packages("SamplingStrata")
+- link to **https://github.com/barcaroli/SamplingStrata-Tutorial-uRos2019/R%20code** and download the script SamplingStrataFunctions.R in **tutorial** directory
+- open it in RStudio
+

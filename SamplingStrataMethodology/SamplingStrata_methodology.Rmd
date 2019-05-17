@@ -1,0 +1,284 @@
+---
+title: "SamplingStrata methodology"
+author: "Marco Ballin, Giulio Barcaroli"
+date: "20 May 2019"
+output: slidy_presentation
+footer: "SamplingStrata Tutorial (uRos2019 - Bucharest 20-21 May 2019)"
+incremental: true
+widescreen: true
+smaller: true
+---
+
+## Problem definition
+
+<br>
+<br>
+Accordingly with Sarndal, Swensson and Wretman
+
+_in a stratified sampling design the population is divided into nonoverlapping subpopulations called strata. A probability sample is selected in each stratum. The selection in the different strata are indipendent_.
+<br>
+<br>
+
+A stratification is a partition of the population units and it is usually defined according to the values of one or more auxiliary variables (X) available for all units of the population. 
+
+## Problem definition {.smaller}
+
+<br>
+If the stratification is given, a typical problem that has to be solved is the definition of the total sample size and its allocation among the strata in order the expected accuracies of the sample estimates are below some fixed thresholds.
+
+<br>
+If we have only one variable of interest (univariate case) the problem can be solved by **Neyman allocation** criteria, while in the multivariate case it is possible to make use of the **Bethel algorithm**.
+
+<br>
+These criteria define the accuracy in terms of variances of Horvitz Tompson estimator:
+
+$$Var(\hat{Y_{g}})=\sum_{h=1}^{H}N_{h}^{2} (1- \frac{ 
+  n_{h}}
+  {N_{h}}) \frac{ 
+  S_{h,g}^{2}}
+  {n_{h}} \;\;\;\;\;  g=1,...,G$$ 
+
+
+
+## Optimal allocation for a given stratification {.smaller}
+
+If we introduce the following cost function:
+
+$$C(n_{1},...,n_{H})=C_{0}+\sum_{h=1}^{H}C_{h}n_{h} $$
+
+the optimization problem can be formalized in this way:
+$$min= C_{0}+\sum_{h=1}^{H}C_{h}n_{h}\\ $$
+under the constraints
+$$ 
+\begin{cases} 
+CV(\hat{Y_{1}}) < U_{1}\\ 
+CV(\hat{Y_{2}}) < U_{2}\\
+...\\
+CV(\hat{Y_{G}}) < U_{G}\\
+\end{cases}
+$$
+where
+$$ CV(\hat{Y_{g}}) = \frac{\sqrt{Var(\hat{Y_{g}})} } {mean(\hat{Y_{g}})}$$
+
+## Optimal allocation for a given stratification {.smaller}
+
+<br>
+In the univariate case it is possible to obtain an analytic solution
+
+$$  n_{h}=\frac{W_{h}S_{h}\sum_{h=1}^{H} W_{h} S_{h}}{U} $$
+
+while in the multivariate case solution has to be searched by numeric algorithm.
+
+Since the previous problem is equivalent to search for a minimun of a convex function under linear constraints, such solution always exist.
+
+## The universe of stratifications
+
+<br>
+If the stratification is not given, it has to be searched possibly using some optimal criteria.  
+
+Coherently with previous definitions, we define the best stratification as the one that support 
+$$\sum_{h=1}^{H}n_h=\min$$
+for a given _U_.
+
+<br>
+**SamplingStrata** looks for such best stratification among all possible stratifications
+
+## The universe of stratifications
+
+Given a population frame with $M$ auxiliary qualitative variables 
+$X_{1},..., X_{M}$ 
+we define as **atomic stratification** 
+the one that can be obtained considering the cartesian product of the $M$ variables.
+$$L=\{(l_{1}),(l_{2}),...,(l_{k})\}$$
+Starting from the atomic stratification, it is possible to generate all the different stratifications that constitute the universe of stratifications. 
+
+For example, using two dichotomous variables $X_{1}$ and $X_{2}$ whose modalities are $\{(u_{1}),(u_{2})\}$ and $\{(v_{1}),(v_{2})\}$ respectivelly, the cartesian product supports four elements $$L=\{(l_{1}),(l_{2}),(l_{3}),(l_{4})\}$$ 
+
+
+```{r, out.width = "500px", fig.align='center', echo = FALSE}
+knitr::include_graphics("Figures/universe.png")
+```
+
+
+## The universe of stratifications {.smaller}
+
+In such conditions, the universe of stratifications is constituted by the following elements:
+
+$$
+\begin{align*}
+&P_{1}=\{(l_{1},l_{2},l_{3},l_{4})\} &P_{2}=\{(l_{1}),(l_{2}),(l_{3}),(l_{4})\} \\
+&P_{3}=\{(l_{1}),(l_{2},l_{3},l_{4})\} &P_{4}=\{(l_{2}),(l_{1},l_{3},l_{4})\} \\
+&P_{5}=\{(l_{3}),(l_{1},l_{2},l_{4})\} &P_{6}=\{(l_{4}),(l_{1},l_{2}),l_{3}\} \\ 
+&P_{7}=\{(l_{1},l_{2}),(l_{3},l_{4})\} &P_{8}=\{(l_{1},l_{3}),(l_{2},l_{4})\} \\
+&P_{9}=\{(l_{1},l_{4}),(l_{2},l_{3})\} \\
+&P_{10}=\{(l_{1},l_{2}),(l_{3}),(l_{4})\} &P_{11}=\{(l_{1},l_{3}),(l_{2}),(l_{4})\} \\
+&P_{12}=\{(l_{1},l_{4}),(l_{2}),(l_{4})\} &P_{13}=\{(l_{2},l_{3}),(l_{1}),(l_{4})\} \\
+&P_{14}=\{(l_{2},l_{4}),(l_{1}),(l_{3})\} &P_{15}=\{(l_{3},l_{4}),(l_{1}),(l_{2})\}
+\end{align*}
+$$
+
+```{r, out.width = "500px", fig.align='center', echo = FALSE}
+knitr::include_graphics("Figures/universe.png")
+```
+
+
+## The universe of stratifications {.smaller}
+
+<br>
+If we would like to determine which is the best stratification among these fifteen it should be sufficient to solve the optimal allocation problem for each one of them and finally to choose the one that support the minimum total sample size. 
+
+<br>
+Unfortunately, the number of feasible stratifications is exponential with respect to the number of initial atomic strata:
+
+$$
+\begin{align*}
+& B_{4}=15 & B_{10}=115975 &
+& B_{100}\approx 4.76 \times 10^{115} 
+\end{align*}
+$$
+Consequently, in concrete cases, it is impossible to examine all alternative stratifications. 
+
+<br>
+The **Genetic Algorithm** allows to explore the universe of stratifications in a very efficient way in order to find the optimal (or close to optimal) solution.
+
+
+## Use of the Genetic Algorithm in the optimization process {.smaller}
+
+The basic implementation of **SamplingStrata** proceed as follows:
+
+- given the survey variables $Y_{1},Y_{2},...,Y_{p}$,  set **precision constraints** on their estimates in the different domains, expressed in terms of coefficients of variations;
+
+- using the auxiliary variables $X_{1},...,X_{M}$ recorded in the frame build the **atomic stratification**;
+
+- for each atomic stratum report the **means** and **standard deviations** of the variables of interest (usually by using proxy variables);
+
+-  on the basis of these inputs, the Genetic Algorithm determines the **best solution** in terms of
+    - **stratification**, 
+    - **sample size**, 
+    - **strata allocation**.
+
+
+## Use of the genetic algorithm in the optimization process  {.smaller}
+
+<br>
+The _genetic algorithm_ looks for the best solution exploiting the principles that support the _natural evolutionary mechanism_ of a population passing through successive _generations_ formed by _individuals_. 
+
+In the stratification problem:
+
+ - a stratification is an _individual_;  
+
+ - a set of _individuals_ (that is a set of _stratifications_) at each iteration of the algorithm is a _generation_ subject to _evolution_;
+
+ - each individual is characterized (identified) by a _genome_ represented by a vector of dimension equal to the number of atomic strata;
+
+ - the position of each element in the vector identifies an atomic stratum;
+
+ - to each element of the vector is assigned a label between $1$ and K (maximum acceptable number of  strata): the sequence of labes indicates the way in which the individual atomic strata have to be aggregated together;
+
+ - each stratification is characterized by a particular sequence of labels. 
+
+## Use of the genetic algorithm in the optimization process  {.smaller}
+
+```{r, out.width = "800px", fig.align='center', echo = FALSE}
+knitr::include_graphics("Figures/Image1.png")
+```
+
+
+## Use of the genetic algorithm in the optimization process  {.smaller}
+
+<br>
+
+- the _fitness_ (that is the total cost or the total sample size if $C_h=1$) of each individual (a stratification) is calculated by solving the corresponding optimization problem by means of Bethel's algorithm;
+
+
+- in passing from one generation to the next, individuals with higher fitness (minimum cost or sample size) are favored by _natural evolutionary mechanisms_; such mechanisms are  
+
+    - selection (individuals with higher fitness have greater probability to contribute to next generation)
+
+    - crossover (some individuals are formed by crossing genoma of individuals with higher fitness)
+
+    - mutation (random mutation to the genoma of infividuals with higher fitness)
+
+- the evolution process end after several generation (iteration) and  **_the individual with the overall best fitness represents the optimal solution_**.
+
+## Use of the genetic algorithm in the optimization process  {.smaller}
+
+```{r, out.width = "1000px", fig.align='center', echo = FALSE}
+knitr::include_graphics("Figures/Image2.png")
+```
+
+## The case of quantitative variables {.smaller}
+
+Up to now, the principles below *SamplingStrata* have been illustrated assuming X are qualitatitive variables or assuming that quantitative variables have been previously categorized (*SamplingStrata* has a function that suggests a split of a quantitative variable in a given number of classes).
+
+If we want to stratify using two or more quantitative variables we can use a more efficient version of algorithm.
+
+
+The gain of efficiency can be achieved thanks to some constraints and assumptions:
+
+
+ - the optimal stratification is searched in the universe of stratifications where each strata is built by contiguous values of the stratification variables;
+
+ - each stratification variable is split in the same number ( _k_ ) of intervals;
+
+ - each stratum is '7' shaped.
+
+
+The first restriction to the universe of stratifications is very common and in most practical cases it supports the overall optimum stratification.
+
+   
+The second point could be easily avoided  but it is essential to satisfy the third condition.
+
+   
+The '7' shape of the strata has been introduced to meet requests by personnel in charge of the business surveys who look for simple stratification rules.
+   
+
+
+## The case of quantitative variables {.smaller}
+
+<br>
+In this case we don't need to build up the initial atomic stratification because each individual of the initial generation of stratifications is obtained by $(k-1)$ random cuts of the range of each stratification variable and then by combining them as exemplified in the following figure.
+
+```{r, out.width = "600px", fig.align='center', echo = FALSE}
+knitr::include_graphics("Figures/Quantitative.png")
+```
+
+The principles of the genetic algorithm is now applied to the boundaries of each stratum.
+
+
+## Working with anticipated variance {.smaller}
+
+<br>
+Another important assumption that we have made until here is that the variance and the mean of each variable of interest can be computed for each atomic stratum using data beloging to a previous surveys or available in the frame.
+
+Such assumption are clearly very strong and some times it can't be accepeted.
+
+A weaker assumption is the one that assume a relationship between our variable of interest $Y$ and a proxy variable $Z$ available in the frame.
+
+A typical relantinship is the linear model
+$Y_i=\beta* Z_i+\epsilon_i$
+
+where $\epsilon \sim\ \ N(0,Z^\gamma*\sigma)$
+
+If $\gamma=0$ the model is homoscedastic otherwise it is heteroscedastic.
+
+(SamplingStrata can handle linear and logistic models)
+
+## Working with anticipated variance {.smaller}
+
+<br>
+<br>
+If the assumptions about the model hold the variance of $HT$ estimator for $Y$ can be writtes as 
+
+
+$$Var(\hat{Y})=\sum_{h=1}^{H}
+                   \frac{N_{h}^{2}}{n_h}
+                   (1- \frac{n_{h}}{N_{h}})
+                   \{\sum_{i=1}^{N_h}
+                   Z_i^{2\gamma} \sigma^2 +
+                   \sum_{i=1}^{N_h}(Z_i \beta-\overline Z\beta)^2
+                   \}
+                   $$
+
+
+As it can be seen, the previous formula for variance can be obtained when $\sigma=0$ and $\beta =1$
