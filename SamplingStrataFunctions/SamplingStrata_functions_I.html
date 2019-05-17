@@ -450,11 +450,11 @@ Marco Ballin, Giulio Barcaroli
 </div>
 <div id="definition-of-the-sampling-frame-data" class="slide section level2">
 <h1>Definition of the sampling frame data</h1>
-<p>As a first step, we have to define a frame dataframe containing the following information:</p>
+<p>As a first step, we have to define a dataframe containing the following information:</p>
 <ul class="incremental">
 <li>a unique identifier of the unit (‘id’);</li>
-<li>the values of m auxiliary variables (named from X1 to Xm);</li>
-<li>the values of p target variables (named from Y1 to Yp);</li>
+<li>the values of m auxiliary variables (named from X<span class="math inline">\(1\)</span> to Xm);</li>
+<li>the values of p target variables (named from Y<span class="math inline">\(1\)</span> to Yp);</li>
 <li>the value of the domain of interest for which we want to produce estimates (named ‘domainvalue’).</li>
 </ul>
 </div>
@@ -479,8 +479,8 @@ Marco Ballin, Giulio Barcaroli
 <h1>Definition of the sampling frame data</h1>
 <p>Let us suppose we want to plan a survey whose target estimates are the totals of population by the first two age classes in each Swiss region. In this case, our Y variables will be:</p>
 <ul>
-<li>Y1: number of men and women aged between 0 and 19</li>
-<li>Y2: number of men and women aged between 20 and 39</li>
+<li>Y<span class="math inline">\(1\)</span>: number of men and women aged between 0 and 19</li>
+<li>Y<span class="math inline">\(2\)</span>: number of men and women aged between 20 and 39</li>
 </ul>
 <p>As for the auxiliary variables (X’s), we can use two of those characterising the area use (wood, and cultivated).</p>
 <p>Finally, we want to produce estimates not only for the whole country, but also for each one of the two different regions we have selected.</p>
@@ -508,19 +508,19 @@ Marco Ballin, Giulio Barcaroli
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="kw">table</span>(swissframe<span class="op">$</span>X2)</a></code></pre></div>
 <pre><code>## 
 ##   1   2   3   4   5   6   7   8   9  10  11  12  13  14  15 
-##  50 102 122 140 167 146 166 141 120  93  77  75  55  35  13</code></pre>
+##  80 147 150 171 152 154 113 100  93  87  77  75  55  35  13</code></pre>
 </div>
 <div id="function-buildstratadf" class="slide section level2 smaller">
 <h1>Function ‘buildStrataDF’</h1>
 <p>The <em>strata</em> dataframe reports information regarding each atomic stratum in the population. There is one row for each stratum. The total number of strata is given by the number of different combinations of X’s values in the frame. For each stratum, the following information is required:</p>
 <ul>
 <li>the identifier of the stratum (named ‘stratum’), concatenation of the values of the X variables;</li>
-<li>the values of the m auxiliary variables (named from X1 to Xm) corresponding to those in the frame;</li>
+<li>the values of the m auxiliary variables (named from X<span class="math inline">\(1\)</span> to Xm) corresponding to those in the frame;</li>
 <li>the total number of units in the population (named ‘N’);</li>
 <li>a flag (named ‘cens’) indicating if the stratum is to be censused (=1) or sampled (=0);</li>
 <li>a variable indicating the cost of interviewing per unit in the stratum (named ‘cost’);</li>
-<li>for each target variable y, its mean and standard deviation, named respectively ‘Mi’ and ‘Si’);</li>
-<li>the value of the domain of interest to which the stratum belongs (‘DOM1’).</li>
+<li>for each target variable Yi, its mean and standard deviation, named respectively ‘Mi’ and ‘Si’);</li>
+<li>the value of the domain of interest to which the stratum belongs (‘DOM<span class="math inline">\(1\)</span>’).</li>
 </ul>
 </div>
 <div id="function-buildstratadf-1" class="slide section level2">
@@ -531,15 +531,15 @@ Marco Ballin, Giulio Barcaroli
 <pre><code>## 
 ## Computations are being done on population data
 ## 
-## Number of strata:  316
+## Number of strata:  319
 ## ... of which with only one unit:  70</code></pre>
 </div>
 <div id="function-buildstratadf-2" class="slide section level2">
 <h1>Function ‘buildStrataDF’</h1>
-<p>Variables ‘cost’ and ‘cens’ are initialised respectively to 1 and 0 for all strata. It is possible to give them different values:</p>
+<p>Variables ‘cost’ and ‘cens’ are initialised respectively to <span class="math inline">\(1\)</span> and 0 for all strata. It is possible to give them different values:</p>
 <ul>
 <li>for variable ‘cost’, it is possible to differentiate the cost of interviewing per unit by assigning real values;</li>
-<li>for variable ‘cens’, it is possible to set it equal to 1 for all strata that are of the ‘take-all’ type (i.e. all units in that strata must be selected).</li>
+<li>for variable ‘cens’, it is possible to set it equal to <span class="math inline">\(1\)</span> for all strata that are of the ‘take-all’ type (i.e. all units in that strata must be selected).</li>
 </ul>
 </div>
 <div id="choice-of-the-precision-constraints-for-each-target-estimate" class="slide section level2">
@@ -579,22 +579,24 @@ Marco Ballin, Giulio Barcaroli
 </div>
 <div id="function-optimizestrata" class="slide section level2 smaller">
 <h1>Function ‘optimizeStrata’</h1>
-<p>Once the strata and the constraints dataframes have been prepared, it is possible to apply the function that optimises the stratification of the frame, that is optimizeStrata. This function operates on all subdomains, identifying the best solution for each one of them. The fundamental parameters to be passed to optimizeStrata are:</p>
+<p>Once the strata and the constraints dataframes have been prepared, it is possible to apply the function that optimises the stratification of the frame, that is ‘optimizeStrata’. This function operates on all subdomains, identifying the best solution for each one of them.</p>
+<p>The fundamental parameters to be passed to ‘optimizeStrata’ are:</p>
 <ul class="incremental">
 <li><strong>errors</strong>: the (mandatory) dataframe containing the precision levels expressed in terms of maximum allowable coefficients of variation that regard the estimates on target variables of the survey</li>
 <li><strong>strata</strong>: the (mandatory) dataframe containing the information related to ‘atomic’ strata, i.e. the strata obtained by the Cartesian product of all auxiliary variables X’s</li>
-<li><strong>cens</strong>: the (optional) dataframe containing the ‘take-all’ strata, those strata whose units must be selected in whatever sample. It has same structure than *strata} dataframe</li>
+<li><strong>cens</strong>: the (optional) dataframe containing the ‘take-all’ strata, those strata whose units must be selected in whatever sample. It has same structure than <em>strata</em> dataframe</li>
 <li><strong>strcens</strong>: flag (TRUE/FALSE) to indicate if ‘take-all’ strata do exist or not. Default is FALSE</li>
-<li><strong>initialStrata</strong>: the initial limit on the number of strata for each solution. Default is NA, and in this case it is set equal to the number of atomic strata in each domain. If the parameter addStrataFactor is equal to zero, then initialStrata is equivalent to the maximum number of strata to be obtained in the final solution</li>
+<li><strong>initialStrata</strong>: the initial limit on the number of strata for each solution. Default is NA, and in this case it is set equal to the number of atomic strata in each domain. If the parameter <em>addStrataFactor</em> is equal to zero, then <em>initialStrata</em> is equivalent to the maximum number of strata to be obtained in the final solution</li>
 <li><strong>addStrataFactor</strong>: indicates the probability that at each mutation the number of strata may increase with respect to the current value. Default is 0.0</li>
 </ul>
 </div>
 <div id="function-optimizestrata-1" class="slide section level2 smaller">
 <h1>Function ‘optimizeStrata’</h1>
 <ul class="incremental">
-<li><strong>minnumstr</strong>: indicates the minimum number of units that must be allocated in each stratum. Default is 2 iter: indicates the maximum number of iterations (= generations) of the genetic algorithm. Default is 50</li>
+<li><strong>minnumstr</strong>: indicates the minimum number of units that must be allocated in each stratum. Default is 2</li>
+<li><strong>iter</strong>: indicates the maximum number of iterations (= generations) of the genetic algorithm. Default is 50</li>
 <li><strong>pops</strong>: dimension of each generations in terms of number of individuals to be generated. Default is 20</li>
-<li><strong>mut_chance</strong> (mutation chance): for each new individual, the probability to change each single chromosome, i.e. one bit of the solution vector. High values of this parameter allow a deeper exploration of the solution space, but a slower convergence, while low values permit a faster convergence, but the final solution can be distant from the optimal one. Default is NA, in correspondence of which it is computed as 1/(vars+1) where vars is the length of elements in the solution</li>
+<li><strong>mut_chance</strong> (mutation chance): for each new individual, the probability to change each single chromosome, i.e. one bit of the solution vector. High values of this parameter allow a deeper exploration of the solution space, but a slower convergence, while low values permit a faster convergence, but the final solution can be distant from the optimal one. Default is NA, in correspondence of which it is computed as <span class="math inline">\(1/(vars+1)\)</span> where <em>vars</em> is the length of elements in the solution</li>
 <li><strong>elitism_rate</strong>: indicates the rate of better solutions that must be preserved from one generation to another. Default is 0.2</li>
 <li><strong>suggestions</strong>: indicates one possible solution (from kmeans clustering or from previous runs) that will be introduced in the initial population. Default is NULL</li>
 <li><strong>parallel</strong>: if TRUE the optimization in the different domains in carried out in parallel</li>
@@ -613,14 +615,14 @@ Marco Ballin, Giulio Barcaroli
 <a class="sourceLine" id="cb13-9" title="9">  <span class="dt">parallel =</span> <span class="ot">FALSE</span>)</a></code></pre></div>
 <pre><code>## 
 ##  *** Domain :  1   1
-##  Number of strata :  157
+##  Number of strata :  155
 ## GA Settings
 ##   Population size       = 10
 ##   Number of Generations = 50
 ##   Elitism               = 2
-##   Mutation Chance       = 0.00632911392405063</code></pre>
+##   Mutation Chance       = 0.00641025641025641</code></pre>
 <pre><code>## Warning in sink(): non c&#39;è nulla da eliminare</code></pre>
-<pre><code>## [1] 279</code></pre>
+<pre><code>## [1] 316</code></pre>
 </div>
 <div id="function-adjustsize" class="slide section level2 smaller">
 <h1>Function ‘adjustSize’</h1>
@@ -634,19 +636,20 @@ Marco Ballin, Giulio Barcaroli
 </div>
 <div id="function-adjustsize-1" class="slide section level2 smaller">
 <h1>Function ‘adjustSize’</h1>
-<p>The function <em>adjustSize</em> permits to obtain the desired final sample size. Let us suppose that the obtained sample size is not affordable.</p>
+<p>The function ‘adjustSize’ permits to obtain the desired final sample size. Let us suppose that the obtained sample size is not affordable.</p>
 <p>We can reduce it by executing the following code:</p>
 <div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" title="1">adjustedStrataLow &lt;-<span class="st"> </span><span class="kw">adjustSize</span>(<span class="dt">size=</span><span class="dv">150</span>,</a>
 <a class="sourceLine" id="cb17-2" title="2">                             <span class="dt">strata=</span>solution1<span class="op">$</span>aggr_strata,</a>
 <a class="sourceLine" id="cb17-3" title="3">                             <span class="dt">cens=</span><span class="ot">NULL</span>)</a></code></pre></div>
 <pre><code>## 
-##  170
-##  159
-##  158
-##  158
-##  Final adjusted size:  158</code></pre>
+##  194
+##  172
+##  165
+##  163
+##  163
+##  Final adjusted size:  163</code></pre>
 <div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" title="1"><span class="kw">sum</span>(adjustedStrataLow<span class="op">$</span>SOLUZ)</a></code></pre></div>
-<pre><code>## [1] 158</code></pre>
+<pre><code>## [1] 163</code></pre>
 </div>
 <div id="function-adjustsize-2" class="slide section level2 smaller">
 <h1>Function ‘adjustSize’</h1>
@@ -655,7 +658,8 @@ Marco Ballin, Giulio Barcaroli
 <a class="sourceLine" id="cb21-2" title="2">                             <span class="dt">strata=</span>solution1<span class="op">$</span>aggr_strata,</a>
 <a class="sourceLine" id="cb21-3" title="3">                             <span class="dt">cens=</span><span class="ot">NULL</span>)</a></code></pre></div>
 <pre><code>## 
-##  342
+##  334
+##  340
 ##  343
 ##  343
 ##  Final adjusted size:  343</code></pre>
@@ -672,16 +676,16 @@ Marco Ballin, Giulio Barcaroli
 <p>We can check immediately the effect of the variations on the size of the sample by using the function ‘expected_CV’:</p>
 <div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" title="1"><span class="kw">expected_CV</span>(solution1<span class="op">$</span>aggr_strata)</a></code></pre></div>
 <pre><code>##      cv(Y1) cv(Y2)
-## DOM1  0.078  0.076
-## DOM2  0.099  0.102</code></pre>
+## DOM1  0.078  0.075
+## DOM2  0.097  0.103</code></pre>
 <div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" title="1"><span class="kw">expected_CV</span>(adjustedStrataLow)</a></code></pre></div>
 <pre><code>##      cv(Y1) cv(Y2)
-## DOM1  0.149  0.175
-## DOM2  0.150  0.170</code></pre>
+## DOM1  0.211  0.265
+## DOM2  0.172  0.194</code></pre>
 <div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" title="1"><span class="kw">expected_CV</span>(adjustedStrataHigh)</a></code></pre></div>
 <pre><code>##      cv(Y1) cv(Y2)
-## DOM1  0.063  0.060
-## DOM2  0.081  0.084</code></pre>
+## DOM1  0.068  0.065
+## DOM2  0.086  0.091</code></pre>
 <div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" title="1">swisserrors</a></code></pre></div>
 <pre><code>##    DOM  CV1  CV2 domainvalue
 ## 1 DOM1 0.08 0.12           1
@@ -708,9 +712,9 @@ Marco Ballin, Giulio Barcaroli
 <a class="sourceLine" id="cb33-3" title="3">                          <span class="dt">writeFiles =</span> <span class="ot">TRUE</span>)</a>
 <a class="sourceLine" id="cb33-4" title="4"><span class="kw">head</span>(newstrata,<span class="dv">3</span>)</a></code></pre></div>
 <pre><code>##      STRATO  N        M1        M2        S1        S2 COST CENS DOM1 X1
-## 1*1     1*1 11 1505.9091 2259.0000 1545.2482 2404.2180    1    0    1  1
+## 1*1     1*1 15 1218.9333 1830.6000 1438.1309 2233.7975    1    0    1  1
 ## 1*11   1*11  1  432.0000  462.0000    0.0000    0.0000    1    0    1  1
-## 1*2     1*2 17  237.2353  313.4706  390.3955  593.6508    1    0    1  1
+## 1*2     1*2 31  376.5806  436.3871  743.7004  940.1645    1    0    1  1
 ##      X2 LABEL STRATUM
 ## 1*1   1     1     1*1
 ## 1*11 11     2    1*11
@@ -723,11 +727,11 @@ Marco Ballin, Giulio Barcaroli
 <a class="sourceLine" id="cb35-2" title="2"><span class="kw">head</span>(strata_aggregation)</a></code></pre></div>
 <pre><code>##   DOM1 AGGR_STRATUM X1 X2
 ## 1    1            1  1  1
-## 2    1            1  7  9
-## 3    1            1  9  9
-## 4    1            1  9 14
-## 5    1            1 11  7
-## 6    1            2  1 11</code></pre>
+## 2    1            1  4  9
+## 3    1            2  1 11
+## 4    1            3  1  2
+## 5    1            3  3  1
+## 6    1            3  5  9</code></pre>
 <p>In this structure, for each aggregate stratum the values of the X’s variables in each contributing atomic stratum are reported. It is then possible to understand the meaning of each aggregate stratum produced by the optimization.</p>
 </div>
 <div id="function-updateframe" class="slide section level2 smaller">
@@ -747,10 +751,10 @@ Marco Ballin, Giulio Barcaroli
 <a class="sourceLine" id="cb38-3" title="3">                       <span class="dt">writeFiles =</span> <span class="ot">FALSE</span>)</a></code></pre></div>
 <pre><code>## 
 ## *** Sample has been drawn successfully ***
-##  258  units have been selected from  56  strata
+##  298  units have been selected from  74  strata
 ## 
 ## ==&gt; There have been  9  take-all strata 
-## from which have been selected  41 units</code></pre>
+## from which have been selected  29 units</code></pre>
 </div>
 <div id="function-selectsample-1" class="slide section level2 smaller">
 <h1>Function ‘selectSample’</h1>
@@ -762,7 +766,7 @@ Marco Ballin, Giulio Barcaroli
 </div>
 <div id="function-evalsolution" class="slide section level2 smaller">
 <h1>Function ‘evalSolution’</h1>
-<p>In order to be confident about the quality of the found solution, the function evalSolution allows to run a simulation, based on the selection of a desired number of samples from the frame to which the stratification, identified as the best, has been applied. The user can invoke this function also indicating the number of samples to be drawn:</p>
+<p>In order to be confident about the quality of the found solution, the function ‘evalSolution’ allows to run a simulation, based on the selection of a desired number of samples from the frame to which the stratification, identified as the best, has been applied. The user can invoke this function also indicating the number of samples to be drawn:</p>
 <div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb40-1" title="1">eval &lt;-<span class="st"> </span><span class="kw">evalSolution</span>(framenew, </a>
 <a class="sourceLine" id="cb40-2" title="2">                     solution1<span class="op">$</span>aggr_strata, </a>
 <a class="sourceLine" id="cb40-3" title="3">                     <span class="dt">nsampl=</span><span class="dv">500</span>, </a>
@@ -793,10 +797,10 @@ cv(Y2)
 1
 </td>
 <td style="text-align:right;">
-<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #ccefdc">0.0912</span>
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #c8eed9">0.0883</span>
 </td>
 <td style="text-align:right;">
-<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #def7e9">0.0872</span>
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #def7e9">0.0837</span>
 </td>
 </tr>
 <tr>
@@ -804,10 +808,10 @@ cv(Y2)
 2
 </td>
 <td style="text-align:right;">
-<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #82d1a3">0.1086</span>
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #8cd5ab">0.1014</span>
 </td>
 <td style="text-align:right;">
-<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #71ca97">0.1126</span>
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #71ca97">0.1074</span>
 </td>
 </tr>
 </tbody>

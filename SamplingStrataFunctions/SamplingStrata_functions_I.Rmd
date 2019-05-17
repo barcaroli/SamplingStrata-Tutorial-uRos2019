@@ -26,11 +26,11 @@ smaller: true
 
 ## Definition of the sampling frame data
 
-As a first step, we have to define a frame dataframe containing the following information:
+As a first step, we have to define a dataframe containing the following information:
 
 > - a unique identifier of the unit ('id');
-> - the values of m auxiliary variables (named from X1 to Xm);
-> - the values of p target variables (named from Y1 to Yp);
+> - the values of m auxiliary variables (named from X$1$ to Xm);
+> - the values of p target variables (named from Y$1$ to Yp);
 > - the value of the domain of interest for which we want to produce estimates (named 'domainvalue').
 
 ## Definition of the sampling frame data {.smaller}
@@ -63,8 +63,8 @@ Among the others, there are the following variables (data are referred to 2003):
 
 Let us suppose we want to plan a survey whose target estimates are the totals of population by the first two age classes in each Swiss region. In this case, our Y variables will be:
 
-* Y1: number of men and women aged between 0 and 19
-* Y2: number of men and women aged between 20 and 39
+* Y$1$: number of men and women aged between 0 and 19
+* Y$2$: number of men and women aged between 20 and 39
 
 As for the auxiliary variables (X's), we can use two of those characterising the area use (wood, and cultivated).
 
@@ -104,12 +104,12 @@ The total number of strata is given by the number of different combinations of X
 For each stratum, the following information is required:
 
 *	the identifier of the stratum (named 'stratum'), concatenation of the values of the X variables;
-*	the values of the m auxiliary variables (named from X1 to Xm) corresponding to those in the frame;
+*	the values of the m auxiliary variables (named from X$1$ to Xm) corresponding to those in the frame;
 *	the total number of units in the population (named 'N');
 *	a flag (named 'cens') indicating if the stratum is to be censused (=1) or sampled (=0);
 *	a variable indicating the cost of interviewing per unit in the stratum (named 'cost');
-*	for each target variable y, its mean and standard deviation, named respectively 'Mi' and 'Si');
-*	the value of the domain of interest to which the stratum belongs ('DOM1').
+*	for each target variable Yi, its mean and standard deviation, named respectively 'Mi' and 'Si');
+*	the value of the domain of interest to which the stratum belongs ('DOM$1$').
 
 ## Function 'buildStrataDF'
 
@@ -123,10 +123,10 @@ swissstrata <- buildStrataDF(swissframe, progress = FALSE)
 
 ## Function 'buildStrataDF'
 
-Variables 'cost' and 'cens' are initialised respectively to 1 and 0 for all strata. It is possible to give them different values:
+Variables 'cost' and 'cens' are initialised respectively to $1$ and 0 for all strata. It is possible to give them different values:
 
 *	for variable 'cost', it is possible to differentiate the cost of interviewing per unit by assigning real values;
-*	for variable 'cens', it is possible to set it equal to 1 for all strata that are of the 'take-all' type (i.e. all units in that strata must be selected).
+*	for variable 'cens', it is possible to set it equal to $1$ for all strata that are of the 'take-all' type (i.e. all units in that strata must be selected).
 
 
 ## Choice of the precision constraints for each target estimate
@@ -171,13 +171,15 @@ This function controls that
 
 ## Function 'optimizeStrata' {.smaller}
 
-Once the strata and the constraints dataframes have been prepared, it is possible to apply the function that optimises the stratification of the frame, that is optimizeStrata. This function operates on all subdomains, identifying the best solution for each one of them. The fundamental parameters to be passed to optimizeStrata are:
+Once the strata and the constraints dataframes have been prepared, it is possible to apply the function that optimises the stratification of the frame, that is 'optimizeStrata'. This function operates on all subdomains, identifying the best solution for each one of them. 
+
+The fundamental parameters to be passed to 'optimizeStrata' are:
 
 > - **errors**: the (mandatory) dataframe containing the precision levels expressed in terms of maximum allowable coefficients of variation that regard the estimates on target variables of the survey
 > - **strata**: the (mandatory) dataframe containing the information related to 'atomic' strata, i.e. the strata obtained by the Cartesian product of all auxiliary variables X's 
-> - **cens**: the (optional) dataframe containing the 'take-all' strata, those strata whose units must be selected in whatever sample. It has same structure than *strata} dataframe
+> - **cens**: the (optional) dataframe containing the 'take-all' strata, those strata whose units must be selected in whatever sample. It has same structure than *strata* dataframe
 > - **strcens**: flag (TRUE/FALSE) to indicate if 'take-all' strata do exist or not. Default is FALSE
-> - **initialStrata**: the initial limit on the number of strata for each solution. Default is NA, and in this case it is set equal to the number of atomic strata in each domain. If the parameter addStrataFactor is equal to zero, then initialStrata is equivalent to the maximum number of strata to be obtained in the final solution
+> - **initialStrata**: the initial limit on the number of strata for each solution. Default is NA, and in this case it is set equal to the number of atomic strata in each domain. If the parameter *addStrataFactor* is equal to zero, then *initialStrata* is equivalent to the maximum number of strata to be obtained in the final solution
 > - **addStrataFactor**: indicates the probability that at each mutation the number of strata may increase with respect to the current value. Default is 0.0
 
 
@@ -185,9 +187,9 @@ Once the strata and the constraints dataframes have been prepared, it is possibl
 
 
 > - **minnumstr**: indicates the minimum number of units that must be allocated in each stratum. Default is 2
-iter: indicates the maximum number of iterations (= generations) of the genetic algorithm. Default is 50
+> - **iter**: indicates the maximum number of iterations (= generations) of the genetic algorithm. Default is 50
 > - **pops**: dimension of each generations in terms of number of individuals to be generated. Default is 20
-> - **mut_chance** (mutation chance): for each new individual, the probability to change each single chromosome, i.e. one bit of the solution vector. High values of this parameter allow a deeper exploration of the solution space, but a slower convergence, while low values permit a faster convergence, but the final solution can be distant from the optimal one. Default is NA, in correspondence of which it is computed as 1/(vars+1) where vars is the length of elements in the solution
+> - **mut_chance** (mutation chance): for each new individual, the probability to change each single chromosome, i.e. one bit of the solution vector. High values of this parameter allow a deeper exploration of the solution space, but a slower convergence, while low values permit a faster convergence, but the final solution can be distant from the optimal one. Default is NA, in correspondence of which it is computed as $1/(vars+1)$ where *vars* is the length of elements in the solution
 > - **elitism_rate**: indicates the rate of better solutions that must be preserved from one generation to another. Default is 0.2
 > - **suggestions**: indicates one possible solution (from kmeans clustering or from previous runs) that will be introduced in the initial population. Default is NULL
 > - **parallel**: if TRUE the optimization in the different domains in carried out in parallel
@@ -223,7 +225,7 @@ In the first case, no action is required. In the second case, it is necessary to
 
 ## Function 'adjustSize' {.smaller}
 
-The function *adjustSize* permits to obtain the desired final sample size.
+The function 'adjustSize' permits to obtain the desired final sample size.
 Let us suppose that the obtained sample size is not affordable. 
 
 We can reduce it by executing the following code:
@@ -334,7 +336,7 @@ the planned sample, the number of selected units, the sum of their weights that 
 
 ## Function 'evalSolution' {.smaller}
 
-In order to be confident about the quality of the found solution, the function evalSolution allows to run a simulation, based on the selection of a desired number of samples from the frame to which the stratification, identified as the best, has been applied. The user can invoke this function also indicating the number of samples to be drawn:
+In order to be confident about the quality of the found solution, the function 'evalSolution' allows to run a simulation, based on the selection of a desired number of samples from the frame to which the stratification, identified as the best, has been applied. The user can invoke this function also indicating the number of samples to be drawn:
 
 
 ```{r, eval=TRUE, echo=TRUE}
