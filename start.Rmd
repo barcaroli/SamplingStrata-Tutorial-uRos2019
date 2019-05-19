@@ -12,7 +12,10 @@ Perform the following steps:
 
 - define a directory in your laptop (ex: **tutorial**)
 - if you don't have RStudio, install it (**https://www.rstudio.com/products/rstudio/download/**)
-- inside RStudio install SamplingStrata: install.packages("SamplingStrata")
-- link to **https://github.com/barcaroli/SamplingStrata-Tutorial-uRos2019/R%20code** and download the script SamplingStrataFunctions.R in **tutorial** directory
-- open it in RStudio
+- inside RStudio install SamplingStrata: **install.packages("SamplingStrata")**
+- go to **//github.com/barcaroli**
+- click on **SamplingStrata-Tutorial-uRos2019**
+- click on **R code**
+- right click on **SamplingStrataFunctions.R** and download the script in **tutorial** directory
+- open **SamplingStrataFunctions.R** in RStudio
 
