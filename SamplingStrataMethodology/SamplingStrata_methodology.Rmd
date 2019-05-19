@@ -13,7 +13,7 @@ smaller: true
 
 <br>
 <br>
-Accordingly with Sarndal, Swensson and Wretman
+Accordingly to Sarndal, Swensson and Wretman
 
 _in a stratified sampling design the population is divided into nonoverlapping subpopulations called strata. A probability sample is selected in each stratum. The selection in the different strata are indipendent_.
 <br>
@@ -74,14 +74,14 @@ Since the previous problem is equivalent to search for a minimun of a convex fun
 ## The universe of stratifications
 
 <br>
-If the stratification is not given, it has to be searched possibly using some optimal criteria.  
+If the stratification is not given, the solution has to be searched possibly using some optimal criteria.  
 
 Coherently with previous definitions, we define the best stratification as the one that support 
 $$\sum_{h=1}^{H}n_h=\min$$
 for a given _U_.
 
 <br>
-**SamplingStrata** looks for such best stratification among all possible stratifications
+**SamplingStrata** looks for the best stratification among all possible stratifications
 
 ## The universe of stratifications
 
