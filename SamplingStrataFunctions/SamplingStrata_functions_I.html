@@ -504,11 +504,11 @@ Marco Ballin, Giulio Barcaroli
 <a class="sourceLine" id="cb3-3" title="3"><span class="kw">table</span>(swissframe<span class="op">$</span>X1)</a></code></pre></div>
 <pre><code>## 
 ##   1   2   3   4   5   6   7   8   9  10  11  12  13  14  15 
-## 206 209 174 154 136 113 115  99  78  64  58  44  25  19   8</code></pre>
+## 285 278 175 140 108  87  76  73  66  60  58  44  25  19   8</code></pre>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="kw">table</span>(swissframe<span class="op">$</span>X2)</a></code></pre></div>
 <pre><code>## 
 ##   1   2   3   4   5   6   7   8   9  10  11  12  13  14  15 
-##  50 102 122 140 167 146 166 141 120  93  77  75  55  35  13</code></pre>
+##  82 151 153 167 147 154 113 100  93  87  77  75  55  35  13</code></pre>
 </div>
 <div id="function-buildstratadf" class="slide section level2 smaller">
 <h1>Function ‘buildStrataDF’</h1>
@@ -531,8 +531,8 @@ Marco Ballin, Giulio Barcaroli
 <pre><code>## 
 ## Computations are being done on population data
 ## 
-## Number of strata:  316
-## ... of which with only one unit:  70</code></pre>
+## Number of strata:  317
+## ... of which with only one unit:  74</code></pre>
 </div>
 <div id="function-buildstratadf-2" class="slide section level2">
 <h1>Function ‘buildStrataDF’</h1>
@@ -613,14 +613,14 @@ Marco Ballin, Giulio Barcaroli
 <a class="sourceLine" id="cb13-9" title="9">  <span class="dt">parallel =</span> <span class="ot">FALSE</span>)</a></code></pre></div>
 <pre><code>## 
 ##  *** Domain :  1   1
-##  Number of strata :  157
+##  Number of strata :  150
 ## GA Settings
 ##   Population size       = 10
 ##   Number of Generations = 50
 ##   Elitism               = 2
-##   Mutation Chance       = 0.00632911392405063</code></pre>
+##   Mutation Chance       = 0.00662251655629139</code></pre>
 <pre><code>## Warning in sink(): non c&#39;è nulla da eliminare</code></pre>
-<pre><code>## [1] 279</code></pre>
+<pre><code>## [1] 310</code></pre>
 </div>
 <div id="function-adjustsize" class="slide section level2 smaller">
 <h1>Function ‘adjustSize’</h1>
@@ -640,13 +640,12 @@ Marco Ballin, Giulio Barcaroli
 <a class="sourceLine" id="cb17-2" title="2">                             <span class="dt">strata=</span>solution1<span class="op">$</span>aggr_strata,</a>
 <a class="sourceLine" id="cb17-3" title="3">                             <span class="dt">cens=</span><span class="ot">NULL</span>)</a></code></pre></div>
 <pre><code>## 
-##  170
-##  159
-##  158
-##  158
-##  Final adjusted size:  158</code></pre>
+##  164
+##  157
+##  157
+##  Final adjusted size:  157</code></pre>
 <div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" title="1"><span class="kw">sum</span>(adjustedStrataLow<span class="op">$</span>SOLUZ)</a></code></pre></div>
-<pre><code>## [1] 158</code></pre>
+<pre><code>## [1] 157</code></pre>
 </div>
 <div id="function-adjustsize-2" class="slide section level2 smaller">
 <h1>Function ‘adjustSize’</h1>
@@ -655,12 +654,14 @@ Marco Ballin, Giulio Barcaroli
 <a class="sourceLine" id="cb21-2" title="2">                             <span class="dt">strata=</span>solution1<span class="op">$</span>aggr_strata,</a>
 <a class="sourceLine" id="cb21-3" title="3">                             <span class="dt">cens=</span><span class="ot">NULL</span>)</a></code></pre></div>
 <pre><code>## 
-##  342
+##  338
+##  341
 ##  343
-##  343
-##  Final adjusted size:  343</code></pre>
+##  345
+##  345
+##  Final adjusted size:  345</code></pre>
 <div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" title="1"><span class="kw">sum</span>(adjustedStrataHigh<span class="op">$</span>SOLUZ)</a></code></pre></div>
-<pre><code>## [1] 343</code></pre>
+<pre><code>## [1] 345</code></pre>
 </div>
 <div id="function-adjustsize-3" class="slide section level2 smaller">
 <h1>Function ‘adjustSize’</h1>
@@ -672,16 +673,16 @@ Marco Ballin, Giulio Barcaroli
 <p>We can check immediately the effect of the variations on the size of the sample by using the function ‘expected_CV’:</p>
 <div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" title="1"><span class="kw">expected_CV</span>(solution1<span class="op">$</span>aggr_strata)</a></code></pre></div>
 <pre><code>##      cv(Y1) cv(Y2)
-## DOM1  0.078  0.076
-## DOM2  0.099  0.102</code></pre>
+## DOM1  0.080  0.077
+## DOM2  0.099  0.111</code></pre>
 <div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" title="1"><span class="kw">expected_CV</span>(adjustedStrataLow)</a></code></pre></div>
 <pre><code>##      cv(Y1) cv(Y2)
-## DOM1  0.149  0.175
-## DOM2  0.150  0.170</code></pre>
+## DOM1  0.173  0.207
+## DOM2  0.150  0.184</code></pre>
 <div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" title="1"><span class="kw">expected_CV</span>(adjustedStrataHigh)</a></code></pre></div>
 <pre><code>##      cv(Y1) cv(Y2)
-## DOM1  0.063  0.060
-## DOM2  0.081  0.084</code></pre>
+## DOM1  0.068  0.065
+## DOM2  0.089  0.096</code></pre>
 <div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" title="1">swisserrors</a></code></pre></div>
 <pre><code>##    DOM  CV1  CV2 domainvalue
 ## 1 DOM1 0.08 0.12           1
@@ -707,14 +708,14 @@ Marco Ballin, Giulio Barcaroli
 <a class="sourceLine" id="cb33-2" title="2">                          solution1, </a>
 <a class="sourceLine" id="cb33-3" title="3">                          <span class="dt">writeFiles =</span> <span class="ot">TRUE</span>)</a>
 <a class="sourceLine" id="cb33-4" title="4"><span class="kw">head</span>(newstrata,<span class="dv">3</span>)</a></code></pre></div>
-<pre><code>##      STRATO  N        M1        M2        S1        S2 COST CENS DOM1 X1
-## 1*1     1*1 11 1505.9091 2259.0000 1545.2482 2404.2180    1    0    1  1
-## 1*11   1*11  1  432.0000  462.0000    0.0000    0.0000    1    0    1  1
-## 1*2     1*2 17  237.2353  313.4706  390.3955  593.6508    1    0    1  1
-##      X2 LABEL STRATUM
-## 1*1   1     1     1*1
-## 1*11 11     2    1*11
-## 1*2   2     3     1*2</code></pre>
+<pre><code>##      STRATO  N     M1      M2       S1       S2 COST CENS DOM1 X1 X2 LABEL
+## 1*1     1*1 20 1322.2 1877.85 1685.872 2433.958    1    0    1  1  1     1
+## 1*11   1*11  1  432.0  462.00    0.000    0.000    1    0    1  1 11     2
+## 1*13   1*13  1 1238.0 1591.00    0.000    0.000    1    0    1  1 13     3
+##      STRATUM
+## 1*1      1*1
+## 1*11    1*11
+## 1*13    1*13</code></pre>
 </div>
 <div id="function-updatestrata-2" class="slide section level2 smaller">
 <h1>Function ‘updateStrata’</h1>
@@ -723,11 +724,11 @@ Marco Ballin, Giulio Barcaroli
 <a class="sourceLine" id="cb35-2" title="2"><span class="kw">head</span>(strata_aggregation)</a></code></pre></div>
 <pre><code>##   DOM1 AGGR_STRATUM X1 X2
 ## 1    1            1  1  1
-## 2    1            1  7  9
-## 3    1            1  9  9
-## 4    1            1  9 14
-## 5    1            1 11  7
-## 6    1            2  1 11</code></pre>
+## 2    1            1  1  7
+## 3    1            1  2  6
+## 4    1            1  5  2
+## 5    1            1  8 13
+## 6    1            1  9  6</code></pre>
 <p>In this structure, for each aggregate stratum the values of the X’s variables in each contributing atomic stratum are reported. It is then possible to understand the meaning of each aggregate stratum produced by the optimization.</p>
 </div>
 <div id="function-updateframe" class="slide section level2 smaller">
@@ -747,10 +748,10 @@ Marco Ballin, Giulio Barcaroli
 <a class="sourceLine" id="cb38-3" title="3">                       <span class="dt">writeFiles =</span> <span class="ot">FALSE</span>)</a></code></pre></div>
 <pre><code>## 
 ## *** Sample has been drawn successfully ***
-##  258  units have been selected from  56  strata
+##  294  units have been selected from  45  strata
 ## 
-## ==&gt; There have been  9  take-all strata 
-## from which have been selected  41 units</code></pre>
+## ==&gt; There have been  7  take-all strata 
+## from which have been selected  40 units</code></pre>
 </div>
 <div id="function-selectsample-1" class="slide section level2 smaller">
 <h1>Function ‘selectSample’</h1>
@@ -793,10 +794,10 @@ cv(Y2)
 1
 </td>
 <td style="text-align:right;">
-<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #ccefdc">0.0912</span>
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #d2f2e0">0.0887</span>
 </td>
 <td style="text-align:right;">
-<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #def7e9">0.0872</span>
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #def7e9">0.0847</span>
 </td>
 </tr>
 <tr>
@@ -804,10 +805,10 @@ cv(Y2)
 2
 </td>
 <td style="text-align:right;">
-<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #82d1a3">0.1086</span>
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #9adbb6">0.1077</span>
 </td>
 <td style="text-align:right;">
-<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #71ca97">0.1126</span>
+<span style="display: block; padding: 0 4px; border-radius: 4px; background-color: #71ca97">0.1219</span>
 </td>
 </tr>
 </tbody>
