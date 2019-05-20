@@ -125,7 +125,7 @@ strataStructure
 
 It is also possible to visually investigate the distribution of population units in the strata by using the function *plotStrata2d*:
 
-```{r, eval = T,echo=TRUE}
+```{r, eval = F,echo=TRUE}
 outstrata <- plotStrata2d(
                   solution2$framenew, 
                   solution2$aggr_strata,
