@@ -51,7 +51,7 @@ swisserrors <- as.data.frame(list(DOM=rep("DOM1",2),
                                   domainvalue=c(1:2)
                             ))
 
-swisserrors
+# swisserrors <- swisserrors[1,]
 
 
 # check input data
@@ -110,14 +110,14 @@ framenew <- updateFrame(swissframe,
 
 # select the sample
 sample <- selectSample(framenew, 
-                       adjustedStrata, 
+                       solution1$aggr_strata, 
                        writeFiles = FALSE)
 
 
 # evaluation by simulation
 set.seed(123)
 eval <- evalSolution(framenew, 
-                     adjustedStrata, 
+                     solution1$aggr_strata, 
                      nsampl=50, 
                      writeFiles=TRUE,
                      progress=TRUE) 
@@ -169,7 +169,7 @@ strataStructure
 outstrata <- plotStrata2d(
   solution2$framenew, 
   solution2$aggr_strata,
-  domain = 2, 
+  domain = 1, 
   vars = c("X1","X2"),
   labels =     c("Surfacesbois","Surfacescult")
 )
@@ -315,7 +315,7 @@ frame_pop$Y2 <- swissmunicipalities$Pop020
 frame_pop$Y3 <- swissmunicipalities$Pop2040
 eval2 <- evalSolution(frame_pop, 
                      solution2$aggr_strata, 
-                     nsampl=500, 
+                     nsampl=100, 
                      writeFiles=TRUE,
                      progress=FALSE) 
 eval2$coeff_var
