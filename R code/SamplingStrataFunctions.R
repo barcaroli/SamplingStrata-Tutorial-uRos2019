@@ -122,7 +122,7 @@ eval <- evalSolution(framenew,
                      writeFiles=TRUE,
                      progress=TRUE) 
 eval$coeff_var
-expected_CV(adjustedStrata)
+expected_CV(solution1$aggr_strata)
 
 #########################################################################
 
@@ -140,7 +140,7 @@ set.seed(123)
 solution2 <- optimizeStrata2 (
   errors = swisserrors, 
   framesamp = swissframe,
-  iter = 50,
+  iter = 100,
   pops = 10,
   nStrata = 10,
   writeFiles = FALSE,
@@ -179,7 +179,7 @@ outstrata
 
 # selection of sample
 
-samp <- selectSample(solution$framenew,solution$aggr_strata)
+samp <- selectSample(solution2$framenew,solution2$aggr_strata)
 
 #########################################################################
 
@@ -293,7 +293,7 @@ set.seed(123)
 solution2 <- optimizeStrata(
   errors = swisserrors, 
   strata = swissstrata2,
-  iter = 50,
+  iter = 100,
   pops = 10,
   writeFiles = TRUE,
   showPlot = TRUE,
